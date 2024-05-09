@@ -1,0 +1,321 @@
+
+create table suppliers(
+Sid number(3) constraint suppliers_Sid_pk primary key,
+sname varchar2(20) constraint suppliers_sname_nn not null,
+sphone varchar2(20) constraint suppliers_sphone_nn not null
+);
+
+create table customers(
+Cid number(4) constraint customers_Cid_pk primary key,
+cname varchar2(20) constraint customers_cname_nn not null,
+cphone varchar2(20) constraint customers_sphone_nn not null,
+email varchar2(30) constraint customers_email_nn not null
+);
+
+create table store(
+stID number(2) constraint store_stID_pk primary key,
+location varchar2(40) constraint store_location_nn not null
+);
+
+create table Minventory(
+invID number(2) constraint Minventory_invID_pk primary key,
+stID number(2) constraint Minventory_stID_fk references store(stID)
+);
+
+create table Memployees(
+Eid number(4) constraint Memployees_Eid_pk primary key,
+salary number(7) constraint Memployees_salary_nn not null,
+ename varchar2(20) constraint Memployees_ename_nn not null,
+Mid number(4) constraint Memployees_Mid_fk references Memployees(Eid),
+stID number(2) constraint Memployees_stID_fk references store(stID)
+);
+
+create table Mproduct(
+pid number(4) constraint Mproduct_pid_pk primary key,
+name varchar2(20) constraint Mproduct_name_nn not null,
+price number(5) constraint Mproduct_price_nn not null
+);
+
+create table Msales(
+salesID number(5) constraint Msales_salesID_pk primary key,
+mdate date constraint Msales_date_nn not null,
+time timestamp constraint Msales_time_nn not null,
+quantity number(7) constraint Msales_quantity_nn not null,
+Cid number(4) constraint Msales_Cid_fk references customers(Cid),
+Eid number(4) constraint Msales_Eid_fk references Memployees(Eid),
+sid number(4) constraint Msales_sid_fk references suppliers(sid),
+pid number(4) constraint Msales_pid_fk references Mproduct(pid)
+);
+
+create table electronics(
+elecid number(4) constraint electronics_elecid_fk references Mproduct (pid),
+constraint electronics_elecid_pk primary key(elecid),
+category varchar2(20) constraint electronics_category_nn not null,
+sid number(4) constraint electronics_sid_fk references suppliers(sid),
+salesID number(5) constraint electronics_salesID_fk references Msales(salesID),
+invID number(2) constraint electronics_invID_fk references Minventory(invID)
+);
+
+create table household( 
+houseid number(4) constraint household_houseid_pk primary key, 
+ constraint household_houseid_fk foreign key(houseid) references Mproduct(pid), 
+ item varchar2(20) constraint household_item_nn not null, 
+ sid number(4) constraint household_sid_fk references suppliers(sid), 
+ salesID number(5) constraint household_salesID_fk references Msales(salesID), 
+ invID number(2) constraint household_invID_fk references Minventory(invID) 
+);
+
+Create table clothing(
+Clothingid number(4) constraint clothing_clothingid_pk primary key,
+constraint clothing_clothingid_fk Foreign Key (Clothingid) references Mproduct(pid),
+clothing_size varchar2(3) constraint clothing_size_nn not null,
+sid number(4) constraint clothing_sid_fk references suppliers(sid),
+salesID number(5) constraint clothing_salesID_fk references Msales(salesID),
+invID number(2) constraint clothing_invID_fk references Minventory(invID)
+);
+
+
+
+insert into suppliers(Sid,sname,sphone) values ('001','Sebnem Coban','+90 533 123 45 67');
+insert into suppliers(Sid,sname,sphone) values ('002','Raygan Kansoy','+90 533 321 48 67');
+insert into suppliers(Sid,sname,sphone) values ('003','Akile Oday','+90 533 234 45 56');
+insert into suppliers(Sid,sname,sphone) values ('004','Husnu Bayramoglu','+90 533 678 45 97');
+insert into suppliers(Sid,sname,sphone) values ('005','Birol Ozkaya','+90 533 123 45 67');
+insert into suppliers(Sid,sname,sphone) values ('006','Halide Saricizmeli','+90 533 789 45 67');
+insert into suppliers(Sid,sname,sphone) values ('007','Yesim Kapsil Cirak','+90 533 345 46 63');
+insert into suppliers(Sid,sname,sphone) values ('008','Umut Bardak','+90 533 567 45 07');
+
+insert into customers values('1111','Khalid Hamid','+90 533 88 77 616','21903847@emu.edu.tr');
+insert into customers values('1112','Zahraa Delbani','+90 533 88 77 600','22701770@emu.edu.tr');
+insert into customers values('1113','Rayan Mohammed','+90 533 85 77 612','21903240@emu.edu.tr');
+insert into customers values('1114','zahra Chouman','+90 533 83 77 786','21901672@emu.edu.tr');
+insert into customers values('1115','Temi Eunice','+90 533 81 77 234','21901521@emu.edu.tr');
+insert into customers values('1116','Mahjoob Abobakr','+90 533 48 17 716','21902506@emu.edu.tr');
+
+insert into store values('10','Famagusta');
+insert into store values('20','Girne');
+insert into store values('30','Lefkosa');
+insert into store values('40','Iskele');
+insert into store values('50','Lefke');
+insert into store values('60','Guzelyurt');
+insert into store values('70','Larnaca');
+insert into store values('80','Ayia Napa');
+insert into Minventory values('11','10');
+insert into Minventory values('12','20');
+insert into Minventory values('13','30');
+insert into Minventory values('14','40');
+insert into Minventory values('15','50');
+insert into Minventory values('16','60');
+insert into Minventory values('17','70');
+insert into Minventory values('18','80');
+
+insert into Memployees (Eid, salary, ename, Mid, stID) values(1001,10000,'Kolawole Adeniran',1001,10);
+insert into Memployees values(1002,10000,'Hudaifa Ghula',1001,20);
+insert into Memployees values(1003,10000,'Ahmed Elfageih',1001,30);
+insert into Memployees values(1004,10000,'Henry Ikediego',1001,40);
+insert into Memployees values(1005,10000,'Jeremiah Adebiyi',1001,50);
+insert into Memployees values(1006,10000,'Alireza Behravesh',1001,60);
+
+insert into Mproduct values(2221,'TV',10000);
+insert into Mproduct values(2222,'AC',12000);
+insert into Mproduct values(2223,'oven',20000);
+insert into Mproduct values(2224,'Table',4000);
+insert into Mproduct values(2225,'Cupboard',1000);
+insert into Mproduct values(2226,'chair',500);
+insert into Mproduct values(2227,'t-shirt',30);
+insert into Mproduct values(2228,'pants',40);
+insert into Mproduct values(2229,'scarf',100);
+
+insert into Msales(salesID,mdate,time,quantity,cid,eid,sid,pid) values(123, TO_DATE('2023-JAN-01', 'YYYY-MON-DD'), TO_TIMESTAMP('2023-JAN-01 13:00:00', 'YYYY-MON-DD HH24:MI:SS'), 1, 1111, 1001, 001, 2227);
+insert into Msales values(124, TO_DATE('2023-FEB-02', 'YYYY-MON-DD'), TO_TIMESTAMP('2023-FEB-02 13:30:00', 'YYYY-MON-DD HH24:MI:SS'), 3, 1112, 1002, 001, 2221);
+insert into Msales values(125, TO_DATE('2023-MAR-02', 'YYYY-MON-DD'), TO_TIMESTAMP('2023-MAR-02 14:30:00', 'YYYY-MON-DD HH24:MI:SS'), 3, 1113, 1003, 002, 2222);
+insert into Msales values(126, TO_DATE('2023-APR-02', 'YYYY-MON-DD'), TO_TIMESTAMP('2023-APR-02 15:30:00', 'YYYY-MON-DD HH24:MI:SS'), 1, 1114, 1004, 005, 2226);
+insert into Msales values(127, TO_DATE('2023-APR-01', 'YYYY-MON-DD'), TO_TIMESTAMP('2023-APR-01 13:30:00', 'YYYY-MON-DD HH24:MI:SS'), 10, 1115, 1005, 006, 2224);
+insert into Msales values(128, TO_DATE('2023-MAY-30', 'YYYY-MON-DD'), TO_TIMESTAMP('2023-MAY-30 19:30:00', 'YYYY-MON-DD HH24:MI:SS'),29, 1112, 1003, 005, 2227);
+
+insert into electronics values(2221,'tv',001,123,11);
+insert into electronics values(2222,'ac',002,124,12);
+insert into electronics values(2223,'oven',003,125,13);
+
+insert into household values(2226,'chair',001,123,11);
+insert into household values(2224,'table',006,128,16);
+insert into household values(2225,'Cupboard',007,125,17);
+
+insert into clothing values(2227,'S',001,123,11);
+insert into clothing values(2228,'M',006,128,16);
+insert into clothing values(2229,'XL',007,125,17);
+
+-- Update employees salary
+update Memployees
+set salary = salary*1.1;
+
+-- Update supplier phone number
+update suppliers
+set sphone = '+90 533 133 35 67'
+where Sid =001;
+
+-- Update customer email
+update customers
+set email = 'zahraadelbani4@gmail.com'
+where Cid = 1112;
+
+-- Update customer email
+update customers
+set email = 'rayyanmosman@gmail.com'
+where Cid = 1113;
+
+-- Update employee store ID
+UPDATE Memployees
+SET stID = 80
+WHERE Eid = 1002;
+
+
+-- Update product price
+UPDATE Mproduct
+SET price = 10000
+WHERE pid = 2222;
+
+-- Update electronics quantity based on a percentage increase
+update Msales
+set quantity = quantity * 1.1
+where salesID in (
+    select salesID
+   from electronics
+    where elecid = 2221
+);
+
+-- Decrease product price by 15%
+update Mproduct
+set price = price * 0.85
+where pid = 2227;
+
+alter table msales
+drop primary key cascade;
+ 
+delete from msales
+where quantity < (select avg(quantity) from msales);
+
+alter table customers
+drop primary key cascade;
+
+delete from customers 
+where upper(cname) like '%I%';
+
+alter table suppliers
+drop primary key cascade;
+
+delete from suppliers
+where upper(sname) like '%KANSOY%';
+
+delete from msales 
+where eid = (select eid 
+             from memployees
+             where stid=50 );
+
+delete from electronics 
+where sid<=2 and upper(category)='TV';
+
+delete from clothing 
+where salesid=125 or upper(clothing_size)='S';
+
+alter table suppliers
+modify sname varchar2(30);
+
+alter table customers
+drop constraint customers_email_nn;
+
+alter table customers
+add constraint customers_email_uk unique(email);
+
+alter table store
+modify location varchar2(30);
+
+alter table store
+modify stID number(3);
+
+alter table Minventory
+modify invID number(3);
+
+alter table clothing
+drop constraint clothing_size_nn;
+
+alter table clothing
+add constraint clothing_size_ck CHECK (clothing_size in('S','M','L','XL','XXL')) ;
+
+alter table Memployees
+add dob date;
+
+alter table suppliers
+modify sphone varchar2(20);
+
+alter table suppliers
+modify sname varchar2(30);
+
+alter table customers
+modify cphone varchar2(30);
+
+alter table customers
+modify cphone varchar2(30);
+
+alter table memployees
+drop column dob;
+
+			
+
+-- Calculate the total sales quantity and revenue for each product
+select p.name, SUM(s.quantity) as total_quantity, sum(s.quantity * p.price) as
+from Mproduct p
+join Msales s on p.pid = s.pid
+group by p.name;
+
+-- Find the average salary of employees in each store
+select e.stID, avg(e.salary) as average_salary
+from Memployees e
+group by e.stID;
+
+-- Retrieve the names of all suppliers who have supplied electronics products
+select distinct s.sname
+from suppliers s
+join electronics e on s.Sid = e.sid;
+
+-- Find the products that have never been sold
+select p.name
+from Mproduct p
+left join Msales s on p.pid = s.pid
+where s.salesID is null;
+
+
+-- Get the total revenue for each supplier from electronics sales
+select p.name, sum(s.quantity * p.price) as total_revenue
+from Mproduct p
+join Msales s on p.pid = s.pid
+group by p.name
+order by total_revenue desc;
+
+-- Retrieve the customers who have purchased products from all categories (electronics, household, and clothing)
+select c.cname
+from customers c
+where (
+    select count(distinct category)
+    from Msales s
+    join Mproduct p on s.pid = p.pid
+    left join electronics e on p.pid = e.elecid
+    left join household h on p.pid = h.houseid
+    left join clothing cl on p.pid = cl.Clothingid
+    where s.Cid = c.Cid
+) = 3;
+
+
+drop table suppliers cascade constraints;	
+drop table customers cascade constraints;
+drop table store cascade constraints;
+drop table Minventory cascade constraints;
+drop table Memployees cascade constraints;
+drop table Mproduct cascade constraints;
+drop table Msales cascade constraints;					
+drop table electronics cascade constraints;
+drop table clothing cascade constraints;
+drop table household cascade constraints;
+
+
+
